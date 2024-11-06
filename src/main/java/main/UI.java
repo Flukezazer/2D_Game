@@ -45,48 +45,46 @@ public class UI {
         messageOn = true;
 
     }
-    
-    public void drawPlayerLife(Graphics g2){
-        
-        
-        int x = gp.tileSize/2;
-        int y = gp.tileSize/2;
+
+    public void resetUI() {
+        messageOn = false;
+        message = "";
+        gameFinished = false;
+        playTime = 0;
+        // Reset other UI elements as needed (e.g., score, messages)
+    }
+
+    public void drawPlayerLife(Graphics g2) {
+
+        int x = gp.tileSize / 2;
+        int y = gp.tileSize / 2;
         int i = 0;
-        
-        while(i < gp.player.maxLife/2){
+
+        while (i < gp.player.maxLife / 2) {
             g2.drawImage(heart_blank, x, y, null);
             i++;
             x += gp.tileSize;
         }
-        
-        x = gp.tileSize/2;
-        y = gp.tileSize/2;
+
+        x = gp.tileSize / 2;
+        y = gp.tileSize / 2;
         i = 0;
-        
+
         //draw current Life
-        
-        while(i < gp.player.life){
+        while (i < gp.player.life) {
             g2.drawImage(heart_half, x, y, null);
             i++;
-            if(i < gp.player.life){
-                g2.drawImage(heart_full, x, y ,null);
+            if (i < gp.player.life) {
+                g2.drawImage(heart_full, x, y, null);
             }
             i++;
             x += gp.tileSize;
         }
-        
-    
-    }
-    
-    public void resetUI() {
-        
+
     }
 
-    
     public void draw(Graphics2D g2) {
-
-        if (gameFinished == true) {
-
+        if (gameFinished) {
             g2.setFont(arial_40);
             g2.setColor(Color.white);
 
@@ -95,12 +93,14 @@ public class UI {
             int x;
             int y;
 
+            // Display "You found the exit!!" message
             text = "You found the exit!!";
             textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
             x = gp.screenWidth / 2 - textLength / 2;
             y = gp.screenHeight / 2 - (gp.tileSize * 3);
             g2.drawString(text, x, y);
 
+            // Display "Congratulations!!!" message
             g2.setFont(arial_80B);
             g2.setColor(Color.yellow);
             text = "Congratulations!!!";
@@ -109,9 +109,17 @@ public class UI {
             y = gp.screenHeight / 2 + (gp.tileSize * 2);
             g2.drawString(text, x, y);
 
-            gp.gameThread = null;
+            // Display "Press Enter to Retry" message
+            g2.setFont(arial_40);
+            g2.setColor(Color.white);
+            text = "Press Enter to Retry";
+            textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            x = gp.screenWidth / 2 - textLength / 2;
+            y += gp.tileSize * 3;  // Position below the congratulations text
+            g2.drawString(text, x, y);
 
         } else {
+            // Regular in-game UI elements
             g2.setFont(arial_40);
             g2.setColor(Color.white);
             g2.drawImage(KeyImage, gp.tileSize * 12, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
@@ -120,20 +128,18 @@ public class UI {
             playTime += (double) 1 / 60;
             g2.drawString("Time:" + dFormat.format(playTime), gp.tileSize * 11, gp.tileSize * 11);
 
-            if (messageOn == true) {
-
+            if (messageOn) {
                 g2.setFont(g2.getFont().deriveFont(30F));
                 g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
 
                 messageCounter++;
 
-                if (messageCounter > 120) { //text disapear 2 sec
+                if (messageCounter > 120) { // text disappears after 2 seconds
                     messageCounter = 0;
                     messageOn = false;
                 }
-
             }
         }
-
     }
+
 }

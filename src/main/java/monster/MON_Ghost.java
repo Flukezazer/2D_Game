@@ -20,7 +20,7 @@ public class MON_Ghost extends Entity {
         this.solidArea = new Rectangle(0, 0, 32, 32);
 
         name = "Ghost";
-        speed = 30;
+        speed = 70;
         maxLife = 4;
         life = maxLife;
 
@@ -106,18 +106,41 @@ public class MON_Ghost extends Entity {
     }
 
     public void randomMovement() {
-        int movement = random.nextInt(4);
+        int direction = random.nextInt(4); // Choose a random direction as an int
+        String movementDirection = ""; // Store the direction as a string for collision checks
+        collisionOn = false; // Reset collision flag
 
-        switch (movement) {
+        // Set movementDirection based on the chosen int direction
+        switch (direction) {
             case 0 ->
-                worldY -= speed;
+                movementDirection = "up";
             case 1 ->
-                worldY += speed;
+                movementDirection = "down";
             case 2 ->
-                worldX -= speed;
+                movementDirection = "left";
             case 3 ->
-                worldX += speed;
+                movementDirection = "right";
         }
 
-    }   
+        // Set the entity's direction for collision checking
+        this.direction = movementDirection;
+
+        // Check for collision in the chosen direction
+        gp.cChecker.checkTile(this);
+
+        // Move only if there’s no collision
+        if (!collisionOn) {
+            switch (movementDirection) {
+                case "up" ->
+                    worldY -= speed;
+                case "down" ->
+                    worldY += speed;
+                case "left" ->
+                    worldX -= speed;
+                case "right" ->
+                    worldX += speed;
+            }
+        }
+    }
+
 }

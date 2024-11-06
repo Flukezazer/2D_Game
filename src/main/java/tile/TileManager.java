@@ -22,7 +22,7 @@ public class TileManager {
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImages();
-        loadMap("/maps/world04"); // Corrected call
+        loadMap("/maps/world05"); // Corrected call
     }
 
     private void getTileImages() {
@@ -33,7 +33,7 @@ public class TileManager {
 
             tile[1] = new Tile();
             tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/earth.png"));
-            tile[1].collision = true;
+            
 
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));

@@ -22,6 +22,12 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
+    GamePanel gp;
+
+    public KeyHandler(GamePanel gp) {
+        this.gp = gp;  // Assign GamePanel instance to the KeyHandler
+    }
+
     public boolean upPressed, downPressed, leftPressed, rightPressed;
     public boolean enterPressed, escPressed, spacePressed;  // Added spacePressed
 
@@ -57,9 +63,16 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) {
             rightPressed = true;
         }
+
         if (code == KeyEvent.VK_ENTER) {
             enterPressed = true;
+
+            // Check if gp and gp.ui are non-null before accessing them
+            if (gp != null && gp.ui != null && gp.ui.gameFinished) {
+                gp.restartGame();  // Restart the game
+            }
         }
+
         if (code == KeyEvent.VK_ESCAPE) {
             escPressed = true;
         }

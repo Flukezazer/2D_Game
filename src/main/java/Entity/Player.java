@@ -42,6 +42,8 @@ public class Player extends Entity {
         maxLife = 6;
         life = maxLife;
     }
+    
+    
 
     public void getPlayerImage() {
         try {
@@ -152,7 +154,7 @@ public class Player extends Entity {
         worldY = gp.tileSize * 53;
 
         // Reset player's speed, direction, etc.
-        speed = 4;
+        speed = 3;
         direction = "down";
 
         // Reset player's health and keys

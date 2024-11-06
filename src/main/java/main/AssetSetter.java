@@ -6,7 +6,7 @@ package main;
 
 import monster.MON_Ghost;
 import monster.MON_Ghost2;
-import object.OBJ_Chest;
+import object.OBJ_Exit;
 import object.OBJ_Door;
 import object.OBJ_Key;
 
@@ -70,6 +70,10 @@ public class AssetSetter {
         gp.monster[10].worldX = gp.tileSize*73;
         gp.monster[10].worldY = gp.tileSize*38;
         
+        gp.monster[11] = new MON_Ghost(gp);
+        gp.monster[11].worldX = gp.tileSize*72;
+        gp.monster[11].worldY = gp.tileSize*38;
+        
         
     }
     public void setObject(){
@@ -98,7 +102,7 @@ public class AssetSetter {
         gp.obj[5].worldX = 88 * gp.tileSize;
         gp.obj[5].worldY = 70 * gp.tileSize;
         
-        gp.obj[6] = new OBJ_Chest();
+        gp.obj[6] = new OBJ_Exit();
         gp.obj[6].worldX = 76* gp.tileSize;
         gp.obj[6].worldY = 86 * gp.tileSize;
         

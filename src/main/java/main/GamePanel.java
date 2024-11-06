@@ -10,6 +10,10 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.MultipleGradientPaint.CycleMethod;
+import java.awt.Point;
+import java.awt.RadialGradientPaint;
+import java.awt.RenderingHints;
 import javax.swing.JPanel;
 import object.OBJ_Key;
 import object.SuperObject;
@@ -130,9 +134,14 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (keyH.escPressed) {
                 // Return to the title screen
-                gameState = titleState;
-                ui.resetUI(); // Optionally reset the UI if necessary
+                System.exit(0); // Optionally reset the UI if necessary
             }
+        }
+
+        if (ui.gameFinished && keyH.enterPressed) {
+            restartGame();// Restart the game when Enter is pressed on game finish screen
+            
+            
         }
 
         // Handle title screen logic (when gameState is titleState)
@@ -182,12 +191,40 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             // Draw player life and player
+            drawGradient(g2, screenWidth, screenHeight, tileSize, player.screenX, player.screenY);
             ui.drawPlayerLife(g2);
             player.draw(g2);
             ui.draw(g2);
         }
 
         g2.dispose();
+    }
+
+    public void drawGradient(Graphics2D g2, int screenWidth, int screenHeight, int tileSize, int playerX, int playerY) {
+        // Center the gradient around the player's position
+        int centerX = playerX + tileSize / 2;
+        int centerY = playerY + tileSize / 2;
+
+        // Define the radius and colors of the gradient
+        int radius = 200;
+        Color[] colors = {new Color(0, 0, 0, 0), new Color(0, 0, 0, 255)}; // Increased alpha to 220 for more darkness
+        float[] fractions = {0.0f, 1.0f};
+
+        // Create the radial gradient paint
+        RadialGradientPaint gradientPaint = new RadialGradientPaint(
+                new Point(centerX, centerY),
+                radius,
+                fractions,
+                colors,
+                CycleMethod.NO_CYCLE
+        );
+
+        // Enable anti-aliasing for smoothness
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Set the gradient paint and apply it
+        g2.setPaint(gradientPaint);
+        g2.fillRect(0, 0, screenWidth, screenHeight);
     }
 
     private void drawTitleScreen(Graphics2D g2, GamePanel gp) {
@@ -262,11 +299,27 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void restartGame() {
-        gameState = 1;  // Set game state to playing state
-        player.resetPlayer();  // Reset player attributes (health, position, etc.)
-        ui.resetUI();  // Reset UI (score, messages, etc.)
-        aSetter.setObject();  // Reset objects
-        aSetter.setMonster();  // Reset monsters
+        // Set the game state to the active playing state
+        gameState = 1;  // Ensure this corresponds to the correct "playing" state in your game
+
+        // Reset player attributes (health, position, etc.)
+        player.resetPlayer();
+
+        // Reset UI elements, including messages and timers
+        ui.resetUI();
+
+        // Reset objects like keys and doors to their initial positions
+        aSetter.setObject();
+
+        // Reset monsters to their initial positions and states
+        aSetter.setMonster();
+
+        // Reset any other game-specific variables or flags
+        ui.gameFinished = false;   // Close the congratulations screen
+        ui.playTime = 0;           // Reset playtime
+
+        // Restart the game thread, if necessary
+        startGameThread();
     }
 
 }
